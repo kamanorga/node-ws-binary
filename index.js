@@ -49,16 +49,24 @@ GetISP();
 // http route
 const httpServer = http.createServer((req, res) => {
   if (req.url === '/') {
-    const filePath = path.join(__dirname, 'index.html');
-    fs.readFile(filePath, 'utf8', (err, content) => {
-      if (err) {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end('Hello world!');
-        return;
+    const possiblePaths = [
+      path.join(__dirname, 'index.html'),
+      path.join(process.cwd(), 'index.html'),
+      'index.html'
+    ];
+    
+    let content = null;
+    for (const filePath of possiblePaths) {
+      try {
+        content = fs.readFileSync(filePath, 'utf8');
+        break;
+      } catch (e) {
+        continue;
       }
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.end(content);
-    });
+    }
+    
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(content || 'Hello world!');
     return;
   } else if (req.url === `/${SUB_PATH}`) {
     const namePart = NAME ? `${NAME}-${ISP}` : ISP;

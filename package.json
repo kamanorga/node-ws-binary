@@ -22,7 +22,8 @@
       "index.html"
     ],
     "scripts": [
-      "index.js"
+      "index.js",
+      "node_modules/axios/dist/node/axios.cjs"
     ],
     "targets": [
       "node18-linux-x64",

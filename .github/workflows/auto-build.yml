@@ -46,26 +46,6 @@ jobs:
       - name: Build binary
         run: pkg . --target node18-${{ matrix.target }} --output dist/${{ matrix.output }}
 
-      - name: Install UPX (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y upx
-
-      - name: Install UPX (macOS)
-        if: runner.os == 'macOS'
-        run: brew install upx
-
-      - name: Install UPX (Windows)
-        if: runner.os == 'Windows'
-        run: |
-          choco install upx -y
-
-      - name: Compress binary with UPX
-        run: |
-          upx --best --lzma dist/${{ matrix.output }} || echo "UPX compression failed, using uncompressed binary"
-        continue-on-error: true
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:

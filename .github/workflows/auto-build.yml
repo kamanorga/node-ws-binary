@@ -1,9 +1,6 @@
 name: Build Binary
 
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -67,11 +64,7 @@ jobs:
       - name: Generate version tag
         id: version
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            VERSION="v$(date +'%Y.%m.%d-%H%M%S')"
-          else
-            VERSION="${GITHUB_REF#refs/tags/}"
-          fi
+          VERSION="latest"
           echo "tag=$VERSION" >> $GITHUB_OUTPUT
           echo "Generated version: $VERSION"
 
@@ -101,11 +94,11 @@ jobs:
 
           | 平台 | 文件名 | 适用系统 |
           |------|--------|----------|
-          | 🐧 Linux AMD64 | `node-ws-linux-amd64` | Intel/AMD 64位 Linux |
-          | 🐧 Linux ARM64 | `node-ws-linux-arm64` | ARM64 架构 Linux (如树莓派) |
-          | 🪟 Windows | `node-ws-win-amd64.exe` | Windows 64位系统 |
-          | 🍎 macOS Intel | `node-ws-macos-amd64` | Intel 芯片的 Mac |
-          | 🍎 macOS Apple Silicon | `node-ws-macos-arm64` | M1/M2/M3 芯片的 Mac |
+          | Linux AMD64 | `node-ws-linux-amd64` | Intel/AMD 64位 Linux |
+          | Linux ARM64 | `node-ws-linux-arm64` | ARM64 架构 Linux (如树莓派) |
+          | Windows | `node-ws-win-amd64.exe` | Windows 64位系统 |
+          | macOS Intel | `node-ws-macos-amd64` | Intel 芯片的 Mac |
+          | macOS Apple Silicon | `node-ws-macos-arm64` | M1/M2/M3 芯片的 Mac |
           EOF
           cat RELEASE_NOTES.md
 

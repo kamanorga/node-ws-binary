@@ -2,11 +2,8 @@ name: Build Binary
 
 on:
   push:
-    branches: [ main, master ]
     tags:
       - 'v*'
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -47,7 +44,7 @@ jobs:
         run: npm install -g pkg
 
       - name: Build binary
-        run: pkg . --target node20-${{ matrix.target }} --output dist/${{ matrix.output }}
+        run: pkg . --target node18-${{ matrix.target }} --output dist/${{ matrix.output }}
 
       - name: Install UPX (Linux)
         if: runner.os == 'Linux'

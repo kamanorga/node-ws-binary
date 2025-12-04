@@ -14,16 +14,16 @@ jobs:
         include:
           - os: ubuntu-latest
             target: linux-x64
-            output: node-ws-linux-x64
+            output: node-ws-linux-amd64
           - os: ubuntu-latest
             target: linux-arm64
             output: node-ws-linux-arm64
           - os: windows-latest
             target: win-x64
-            output: node-ws-win-x64.exe
+            output: node-ws-win-amd64.exe
           - os: macos-latest
             target: macos-x64
-            output: node-ws-macos-x64
+            output: node-ws-macos-amd64
           - os: macos-latest
             target: macos-arm64
             output: node-ws-macos-arm64
@@ -110,10 +110,10 @@ jobs:
 
           | 平台 | 文件名 | 适用系统 |
           |------|--------|----------|
-          | 🐧 Linux x64 | `node-ws-linux-x64` | Intel/AMD 64位 Linux |
+          | 🐧 Linux AMD64 | `node-ws-linux-amd64` | Intel/AMD 64位 Linux |
           | 🐧 Linux ARM64 | `node-ws-linux-arm64` | ARM64 架构 Linux (如树莓派) |
-          | 🪟 Windows | `node-ws-win-x64.exe` | Windows 64位系统 |
-          | 🍎 macOS Intel | `node-ws-macos-x64` | Intel 芯片的 Mac |
+          | 🪟 Windows | `node-ws-win-amd64.exe` | Windows 64位系统 |
+          | 🍎 macOS Intel | `node-ws-macos-amd64` | Intel 芯片的 Mac |
           | 🍎 macOS Apple Silicon | `node-ws-macos-arm64` | M1/M2/M3 芯片的 Mac |
           EOF
           cat RELEASE_NOTES.md

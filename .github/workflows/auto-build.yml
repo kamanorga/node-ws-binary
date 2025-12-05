@@ -32,11 +32,8 @@ jobs:
           node -e "require('ws'); console.log('✓ ws installed');"
           node -e "require('jsvms/protocols/vmess/server'); console.log('✓ jsvms installed');"
 
-      - name: Install pkg
-        run: npm install -g pkg
-
       - name: Build binary
-        run: pkg . --target node18-${{ matrix.target }} --output dist/${{ matrix.output }}
+        run: npx pkg . --target node18-${{ matrix.target }} --output dist/${{ matrix.output }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

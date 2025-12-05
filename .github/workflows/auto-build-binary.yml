@@ -90,7 +90,7 @@ jobs:
     - name: Create or Update Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: node-ws-binary
+        tag_name: latest
         name: node-ws-binary
         draft: false
         prerelease: false
@@ -98,32 +98,22 @@ jobs:
           dist/nodews_linux_amd64
           dist/nodews_linux_arm64
         body: |
-          ## Node WebSocket Server Binary (Latest Dev Build)
+          ## Node WebSocket Server Binary (Latest Build)
           
-          **⚠️ This release is automatically updated with each push to dev branch**
-          
-          ### 📦 Binaries
+          ### 📦Binaries
           - `nodews_linux_amd64` - Linux AMD64/x86_64
           - `nodews_linux_arm64` - Linux ARM64/aarch64
           
-          ### 🚀 Quick Start
+          ### 🚀Quick Start
           ```bash
           # Download (AMD64)
-          wget https://github.com/${{ github.repository }}/releases/download/node-ws-binary/nodews_linux_amd64
+          wget -O nodews https://github.com/${{ github.repository }}/releases/download/node-ws-binary/nodews_linux_amd64
           
           # Make executable
-          chmod +x nodews_linux_amd64
+          chmod +x nodews
           
-          # Run
-          ./nodews_linux_amd64
+          # Run with environment variables
+          UUID=your_uuid NEZHA_SERVER=your_server NEZHA_KEY=your_key DOMAIN=your_domain PORT=3000 NAME=your_name ./nodews
           ```
-          
-          ### 📝 Environment Variables
-          - `UUID` - User UUID
-          - `PORT` - Server port (default: 3000)
-          - `DOMAIN` - Domain name
-          - `NAME` - Custom server name
-          - `WSPATH` - WebSocket path
-          - `SUB_PATH` - Subscription path (default: sub)
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

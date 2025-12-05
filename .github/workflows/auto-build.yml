@@ -1,4 +1,4 @@
-name: Build Binary
+name: Build Node-ws Binary
 
 on:
   workflow_dispatch:
@@ -10,20 +10,11 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            target: linux-x64
+            target: linux-amd64
             output: node-ws-linux-amd64
           - os: ubuntu-latest
             target: linux-arm64
             output: node-ws-linux-arm64
-          - os: windows-latest
-            target: win-x64
-            output: node-ws-win-amd64.exe
-          - os: macos-latest
-            target: macos-x64
-            output: node-ws-macos-amd64
-          - os: macos-latest
-            target: macos-arm64
-            output: node-ws-macos-arm64
 
     steps:
       - name: Checkout code
@@ -32,10 +23,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '18'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install --legacy-peer-deps
+          # Verify critical dependencies
+          node -e "require('ws'); console.log('✓ ws installed');"
+          node -e "require('jsvms/protocols/vmess/server'); console.log('✓ jsvms installed');"
 
       - name: Install pkg
         run: npm install -g pkg
@@ -68,6 +63,34 @@ jobs:
           echo "tag=$VERSION" >> $GITHUB_OUTPUT
           echo "Generated version: $VERSION"
 
+      - name: Delete existing release
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            const releases = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            
+            const release = releases.data.find(r => r.tag_name === 'latest');
+            if (release) {
+              await github.rest.repos.deleteRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: release.id,
+              });
+              console.log('Deleted existing release');
+            }
+
+      - name: Delete existing tag
+        continue-on-error: true
+        run: |
+          git push --delete origin latest || true
+
+      - name: Wait for deletion
+        run: sleep 3
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
@@ -96,9 +119,6 @@ jobs:
           |------|--------|----------|
           | Linux AMD64 | `node-ws-linux-amd64` | Intel/AMD 64位 Linux |
           | Linux ARM64 | `node-ws-linux-arm64` | ARM64 架构 Linux (如树莓派) |
-          | Windows | `node-ws-win-amd64.exe` | Windows 64位系统 |
-          | macOS Intel | `node-ws-macos-amd64` | Intel 芯片的 Mac |
-          | macOS Apple Silicon | `node-ws-macos-arm64` | M1/M2/M3 芯片的 Mac |
           EOF
           cat RELEASE_NOTES.md
 

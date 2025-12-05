@@ -32,8 +32,17 @@ jobs:
           node -e "require('ws'); console.log('✓ ws installed');"
           node -e "require('jsvms/protocols/vmess/server'); console.log('✓ jsvms installed');"
 
+      - name: Install pkg locally
+        run: npm install pkg@latest --save-dev --legacy-peer-deps
+
       - name: Build binary
-        run: npx pkg . --target node18-${{ matrix.target }} --output dist/${{ matrix.output }}
+        timeout-minutes: 15
+        run: |
+          echo "Starting build for ${{ matrix.target }}..."
+          mkdir -p dist
+          npx pkg . --target node18-${{ matrix.target }} --output dist/${{ matrix.output }}
+          ls -lh dist/
+          echo "Build completed successfully"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

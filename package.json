@@ -12,25 +12,22 @@
   },
   "dependencies": {
     "ws": "^8.14.2",
-    "axios": "^1.12.2"
+    "jsvms": "^1.0.0"
   },
   "engines": {
     "node": ">=14"
   },
   "pkg": {
     "assets": [
-      "index.html"
+      "index.html",
+      "node_modules/jsvms/**/*"
     ],
     "scripts": [
-      "index.js",
-      "node_modules/axios/dist/node/axios.cjs"
+      "index.js"
     ],
     "targets": [
-      "node18-linux-x64",
-      "node18-linux-arm64",
-      "node18-win-x64",
-      "node18-macos-x64",
-      "node18-macos-arm64"
+      "node18-linux-amd64",
+      "node18-linux-arm64"
     ],
     "outputPath": "dist"
   }
